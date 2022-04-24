@@ -110,16 +110,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func removerColaborador(_ sender: UIButton) {
-        // TODO: Inserir Feature 2 Aqui!
-        func removeColaborador(comMatricula matricula: Int) {
-            colaboradores.removeAll{ $0.matricula == matricula }
-        }
-        // Coloque uma lista ordenada de colaboradores (apenas com os nomes) na propriedade 'outputMessage'! (Assim, a gente consegue ver que de fato o colaborador foi removido)
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
-        
-        // Importante deixar essa função como última porque ela reseta o sistema por estado inicial.
-        resetaRemoveColaborador()
+        removeColaborador(comMatricula: matriculaColaborador)
+       resetaRemoveColaborador()
     }
     
     @IBAction func listarGastosMensaisComTodosColaboradores(_ sender: UIButton) {
@@ -184,6 +176,10 @@ class ViewController: UIViewController {
         let string = stringArray.joined(separator: ", ")
         
         return string
+    }
+    
+    func removeColaborador(comMatricula matricula: Int) {
+        colaboradores.removeAll{ $0.matricula == matricula }
     }
 }
 
