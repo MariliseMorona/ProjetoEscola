@@ -126,14 +126,9 @@ class ViewController: UIViewController {
     
     @IBAction func listarGastosMensaisComTodosColaboradores(_ sender: UIButton) {
         // TODO: Inserir Feature 3 Aqui!
-        func listaGastoMensais() -> Double {
-            var gastoTotal: Double = 0
-            for colaborador in colaboradores {
-                gastoTotal += colaborador.salario
-            }
-            return gastoTotal
-            
-        }
+        
+        let messageGastosTotais = String(listaGastoMensais())
+        outputMessage.text = messageGastosTotais
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
         // outputMessage.text = "A sua mensagem aqui"
@@ -142,11 +137,9 @@ class ViewController: UIViewController {
     @IBAction func listarGastosMensaisPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 4 Aqui!
         
-        func listaGasto(daCargo cargo: Cargo) -> String {
-            var gastoTotal: Double = 0
-            gastoTotal = colaboradores.map{ $0.salario }.reduce(0, +)
-            return "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
-        }
+        
+        outputMessage.text = listaGasto(doCargo: cargoSelecionado)
+        
         // Você pode utilizar a propriedade 'cargoSelecionado' para escolher listar um cargo só.
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
@@ -211,5 +204,23 @@ class ViewController: UIViewController {
         
     }
     
+    func listaGastoMensais() -> Double {
+        var gastoTotal: Double = 0
+        for colaborador in colaboradores {
+            gastoTotal += colaborador.salario
+        }
+        return gastoTotal
+        
+    }
+    
+    func listaGasto(doCargo cargo: Cargo) -> String {
+        var gastoTotal: Double = 0
+        
+        for colaborador in colaboradores where colaborador.cargo == cargo {
+             gastoTotal += colaborador.salario
+        }
+        let messageGastosTotaisPorCargo = "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
+        return messageGastosTotaisPorCargo
+    }
 }
 
