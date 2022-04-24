@@ -139,27 +139,12 @@ class ViewController: UIViewController {
     }
     
     @IBAction func listarNomesColaboradoresOrdemAlfabetica(_ sender: UIButton) {
-        // TODO: Inserir Feature 6 Aqui!
-        func listaColaboradoresEmOrdemAlfabetica() -> [String] {
-            var nomes: [String] = []
-            nomes = colaboradores.map{ $0.nome }.sorted()
-            return nomes
-        }
+        outputMessage.text = listaColaboradoresEmOrdemAlfabetica()
+        
     }
-        // Coloque a mensagem na propriedade 'outputMessage'!
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
-        
-        // No exemplo do .playgrounds, a gente tem uma função que retorna um Array de String ([String]).
-        // Basta fazer como no exemplo abaixo:
-        // let nomes = <sua função que retorna todos os nomes ordenados em um Array de [String]>
-        // let nomesJuntos = nomes.joined(separator: ", ")
-        // outputMessage.text = newSentence
-        // Dei colherinha de chá aqui hein 🥄☕️.
+    
     func adicionaColaborador(_ colaborador: Colaborador){
-        
         colaboradores.append(colaborador)
-        
         outputMessage.text = colaborador.seApresentar()
         
     }
@@ -188,6 +173,17 @@ class ViewController: UIViewController {
         quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
     
         return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
+    }
+    
+    func listaColaboradoresEmOrdemAlfabetica() -> String {
+        var nomes: [String] = []
+        nomes = colaboradores.map{ $0.nome }.sorted()
+        
+        let arrayNomes = nomes.sorted(by: { $0.lowercased() < $1.lowercased() })
+        let stringArray = arrayNomes
+        let string = stringArray.joined(separator: ", ")
+        
+        return string
     }
 }
 
