@@ -19,7 +19,7 @@ let segundoSalario  = 2000
 let terceiroSalario = 3000
 let quartoSalario   = 2500
 
-//let somatorio = ???
+let somatorio = primeiroSalario + segundoSalario + terceiroSalario + quartoSalario
 
 // A resposta esperada do somatório é 8500!
 
@@ -38,23 +38,40 @@ let quartoSalario   = 2500
 
 // Somatório = 8500
 let salarios1 = [1000, 2000, 3000, 2500]
-// Seu somatório aqui!
+var sum1 = 0
+salarios1.forEach ({ sum1 += $0})
+print(sum1)
+
 
 // Somatório = 5010
 let salarios2 = [3000, 1500, 500, 10]
-// Seu somatório aqui!
+var sum2 = salarios2.reduce(0, +)
+print(sum2)
+
 
 // Somatório = 55500
 let salarios3 = [8500, 10000, 13000, 24000]
-// Seu somatório aqui!
+var sum3 = 0
+for salario in salarios3{
+    sum3 += salario
+}
+print(sum3)
+
 
 // Somatório = 2500
 let salarios4 = [2500]
-// Seu somatório aqui!
+var sum4 = 0
+salarios4.forEach ({ sum4 += $0 })
+print(sum4)
+
 
 // Somatório 71670
-let salários5 = [1000, 200, 6000, 70, 4000, 100, 40000, 8000, 10000, 2300]
-// Seu somatório aqui!
+let salarios5 = [1000, 200, 6000, 70, 4000, 100, 40000, 8000, 10000, 2300]
+var sum5 = 0
+for salario in salarios5{
+    sum5 += salario
+}
+print(sum5)
 
 /*:
 Legal, mas... ninguém quer ficar repetindo todas essas linhas de código para realizar um somatório, não é mesmo?
@@ -68,7 +85,14 @@ Legal, mas... ninguém quer ficar repetindo todas essas linhas de código para r
  > Talvez você tenha algo como *func somatorioDeSalarios(salarios: [Double]) -> Double*.
 
 */
-
+func somatorioDeSalarios(salarios: [Double]) -> Double{
+    var sum = 0.0
+    
+    for salario in salarios{
+        sum += salario
+    }
+    return sum
+}
 // Sua função aqui!
 // Você pode usar as variáveis declaradas anteriormente!
 

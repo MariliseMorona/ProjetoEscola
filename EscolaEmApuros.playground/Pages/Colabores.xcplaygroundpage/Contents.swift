@@ -35,6 +35,22 @@ let renan = Pessoa(nome: "Renan", CPF: "123.456.789-10", profissao: .professor)
 
 // Seu struct aqui!
 
+enum Cargo{
+    case monitor, professor, coordenador, diretor, assistente
+}
+struct Colaborador{
+    let nome: String
+    let matricula: Int
+    let salario: Double
+    let cargo: Cargo
+    
+    func seApresentar()-> String{
+        let apresentacao = "Meu nome é \(nome), sou \(cargo) e minha matrícula é \(matricula)"
+        return apresentacao
+    }
+}
+let funcionario01 = Colaborador(nome: "Carlos", matricula: 24365766543, salario: 3000.00, cargo: .diretor)
+funcionario01.seApresentar()
 /*:
  Excelente!
  

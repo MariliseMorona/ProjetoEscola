@@ -291,7 +291,300 @@ print(abrigo.listaQuantidadeDeCachorro(daRaca: .golden))
 print(abrigo.listaCachorrosEmOrdemAlfabetica())
 
 // Seu sistema aqui!
+// *********************************** SISTEMA ESCOLA *************************************************
 
+enum Cargo{
+    case monitor
+    case professor
+    case coordenador
+    case diretor
+    case assistente
+    
+    func nomeFormal() -> String {
+        switch self {
+        case .assistente:
+            return "Assistente"
+        case .coordenador:
+            return "Coordenador"
+        case .diretor:
+            return "Diretor"
+        case .monitor:
+            return "Monitor"
+        case .professor:
+            return "Professor"
+        }
+    }
+    
+    
+    func abreviacaoCargo(doCargo cargo: Cargo) -> String{
+        switch cargo {
+        case .assistente:
+            return "Asst."
+        case .coordenador:
+            return "Coord."
+        case .diretor:
+            return "Dir."
+        case .monitor:
+            return "Mntr."
+        case .professor:
+            
+            return "Prof."
+        }
+    }
+}
+    struct Colaborador{
+        let nome: String
+        let matricula: Int
+        let salario: Double
+        let cargo: Cargo
+        
+        func seApresentar()-> String{
+            let apresentacao = "Meu nome é \(nome), sou \(cargo) e minha matrícula é \(matricula)"
+            return apresentacao
+        }
+    }
+    
+    let funcionario01 = Colaborador(nome: "Carlos", matricula: 24365766543, salario: 3000.00, cargo: .diretor)
+    funcionario01.seApresentar()
+
+class Escola {
+    var colaboradores: [Colaborador]
+    
+    init(colaboradores: [Colaborador]) {
+        self.colaboradores = colaboradores
+    }
+    
+    // Funcionalidade 1 do sistema da escola
+    // Cadastrar novos colaboradores
+    
+    
+    
+    
+    
+    
+    func adicionaColaborador(_ colaborador: Colaborador) {
+               colaboradores.append(colaborador)
+        
+    }
+    
+    // Funcionalidade 2 do sistema da escola
+    // Remover colabores através de sua matrícula
+    func removeColaborador(comMatricula matricula: Int) {
+        // Solução 1
+        /*
+        for indice in 0..<colaboradores.count {
+            let colaborador = colaboradores[indice]
+            if colaborador.matricula == matricula {
+                colaboradores.remove(at: indice)
+            }
+        }
+ */
+        
+        // Solução 2
+        /*
+        for (indice, colaborador) in colaboradores.enumerated() {
+            if colaborador.matricula == matricula {
+                colaboradores.remove(at: indice)
+            }
+        }
+ */
+        
+        // Solução 3
+        /*
+        colaboradores.removeAll { (colaborador) -> Bool in
+                   colaborador.matricula == matricula
+               }
+*/
+        
+        // Solução 4
+        colaboradores.removeAll{ $0.matricula == matricula }
+        }
+           
+        // Funcionalidade 3 do sistema da escola
+        // Listar gastos mensais com todos os colaboradores
+        func listaGastoMensais() -> Double {
+            var gastoTotal: Double = 0
+            
+            for colaborador in colaboradores {
+                // Solução 1
+                /*
+                let salario = colaborador.salario
+                gastoTotal = gastoTotal + salario
+            }
+            return gastoTotal
+ */
+                
+                // Solução 2
+                /*
+                let salario = colaborador.salario
+                gastoTotal += salario
+            }
+            return gastoTotal
+ */
+                
+                // Solução 3
+                gastoTotal += colaborador.salario
+            }
+            return gastoTotal
+    }
+    
+    
+    // Funcionalidade 4 do sistema da escola
+    // Listar gastos mensais por cargo
+    func listaGasto(daCargo cargo: Cargo) -> String {
+        var gastoTotal: Double = 0
+        
+        // Solução 1
+        /*
+        for colaborador in colaboradores {
+            if colaborador.cargo == cargo {
+                gastoTotal += colaborador.salario
+            }
+        }
+        return "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
+        */
+        
+        // Solução 2
+        /*
+        for colaborador in colaboradores where colaborador.cargo == cargo {
+             gastoTotal += colaborador.salario
+        }
+        return "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
+        */
+        
+        // Solução 3
+        gastoTotal = colaboradores.map{ $0.salario }.reduce(0, +)
+        return "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
+    }
+    
+    // Funcionalidade 5 do sistema da escola
+    // Listar quantas pessoas existem por cargo
+    func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> String {
+        var quantidadeDeColaboradores = 0
+        
+        // Solução 1
+        /*
+        for colaborador in colaboradores {
+            if colaborador.cargo == cargo {
+                quantidadeDeColaboradores += 1
+            }
+        }
+        return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
+ */
+        
+        // Solução 2
+   /*
+        for colaborador in colaboradores where colaborador.cargo == cargo {
+             quantidadeDeColaboradores += 1
+         }
+        return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
+ */
+        
+        // Solução 3
+        quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
+    
+        return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
+    }
+    
+    // Funcionalidade 6 do sistema da escola
+    // Listar os nomes de todos os colaboradores em ordem alfabética
+    func listaColaboradoresEmOrdemAlfabetica() -> [String] {
+        var nomes: [String] = []
+        
+        // Solução 1
+        /*
+        for colaborador in colaboradores {
+            let colaboradorNome = colaborador.nome
+            nomes.append(colaboradorNome)
+        }
+          nomes.sort()
+        return nomes
+*/
+        
+        // Solução 2
+        /*
+        nomes = colaboradores.map{ $0.nome }
+        nomes.sort()
+        return nomes
+ */
+        
+        // Solução 3
+        nomes = colaboradores.map{ $0.nome }.sorted()
+        return nomes
+    }
+}
+
+func condicaoContratacao(_ colaborador: Colaborador){
+    let escola = Escola(colaboradores: muitosColaboradores)
+    let numeroCoordenadores = escola.listaQuantidadeDeColaboradores(doCargo: .coordenador)
+    let numeroProfessores = escola.listaQuantidadeDeColaboradores(doCargo: .professor)
+    let numeroDiretores = escola.listaQuantidadeDeColaboradores(doCargo: .diretor)
+    let maximoDiretores = 1
+             
+    if colaborador.cargo == .coordenador, numeroCoordenadores >= numeroProfessores{
+        print("Você não pode mais contratar coordenadores.")
+    } else if colaborador.cargo == .diretor, numeroDiretores >= maximoDiretores {
+        print("Você não pode mais contratar coordenadores.")
+    } else {
+        escola.adicionaColaborador(colaborador)
+    }
+}
+
+let muitosColaboradores: [Colaborador] =
+    [
+        Colaborador(nome: "Fernanda", matricula: 3245657, salario: 2000.00, cargo: .assistente),
+        Colaborador(nome: "Jose", matricula: 3245658, salario: 2000.00, cargo: .coordenador),
+        Colaborador(nome: "Carlos", matricula: 3245659, salario: 2000.00, cargo: .diretor),
+        Colaborador(nome: "Julia", matricula: 3245660, salario: 2000.00, cargo: .monitor),
+        Colaborador(nome: "Jussara", matricula: 3245661, salario: 2000.00, cargo: .professor),
+        Colaborador(nome: "Caio", matricula: 3245662, salario: 2000.00, cargo: .assistente),
+        Colaborador(nome: "Luiz", matricula: 3245663, salario: 2000.00, cargo: .assistente),
+        Colaborador(nome: "Laura", matricula: 3245664, salario: 2000.00, cargo: .diretor),
+        Colaborador(nome: "Ricardo", matricula: 3245665, salario: 2000.00, cargo: .coordenador),
+        Colaborador(nome: "Rogerio", matricula: 3245666, salario: 2000.00, cargo: .monitor),
+        Colaborador(nome: "Sandro", matricula: 3245667, salario: 2000.00, cargo: .professor),
+        Colaborador(nome: "Fabiola", matricula: 3245668, salario: 2000.00, cargo: .professor),
+        Colaborador(nome: "Zuleica", matricula: 3245669, salario: 2000.00, cargo: .professor),
+        Colaborador(nome: "Camila", matricula: 3245670, salario: 2000.00, cargo: .assistente),
+        Colaborador(nome: "Rodrigo", matricula: 3245671, salario: 2000.00, cargo: .assistente),
+        Colaborador(nome: "Richard", matricula: 3245672, salario: 2000.00, cargo: .monitor),
+        Colaborador(nome: "Roberta", matricula: 3245673, salario: 2000.00, cargo: .coordenador)
+        
+    ]
+
+let escola = Escola(colaboradores: muitosColaboradores)
+
+// Funcionalidade 1
+print(escola.listaColaboradoresEmOrdemAlfabetica())
+
+let funcionario02 = Colaborador(nome: "Alvaro", matricula: 3245674, salario: 2000.00, cargo: .coordenador)
+escola.adicionaColaborador(funcionario02)
+print(escola.listaColaboradoresEmOrdemAlfabetica())
+
+// Funcionalidade 2
+print(escola.listaColaboradoresEmOrdemAlfabetica())
+escola.removeColaborador(comMatricula: 3245663)
+print(escola.listaColaboradoresEmOrdemAlfabetica())
+
+// Funcionalidade 3
+print(escola.listaGastoMensais())
+
+// Funcionalidade 4
+print(escola.listaGasto(daCargo: .assistente))
+print(escola.listaGasto(daCargo: .coordenador))
+print(escola.listaGasto(daCargo: .diretor))
+print(escola.listaGasto(daCargo: .monitor))
+print(escola.listaGasto(daCargo: .professor))
+
+// Funcionalidade 5
+print(escola.listaQuantidadeDeColaboradores(doCargo: .assistente))
+print(escola.listaQuantidadeDeColaboradores(doCargo: .coordenador))
+print(escola.listaQuantidadeDeColaboradores(doCargo: .diretor))
+print(escola.listaQuantidadeDeColaboradores(doCargo: .monitor))
+print(escola.listaQuantidadeDeColaboradores(doCargo: .professor))
+
+// Funcionalidade 6
+print(escola.listaColaboradoresEmOrdemAlfabetica())
 /*:
  [Já acabou, Jéssica?](https://www.otempo.com.br/polopoly_fs/1.1170250.1534206665!httpImage/image.png)
  

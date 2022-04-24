@@ -38,7 +38,13 @@ enum Signo {
 let meuSigno: Signo = .aries // Apenas o melhor 💅
 
 // Seu Enum aqui!
-
+enum Cargo{
+    case monitor
+    case professor
+    case coordenador
+    case diretor
+    case assistente
+}
 /*:
  Perfeito! Agora que você criou um *enum* para os cargos de uma escola, é hora de incrementarmos um pouco mais a nossa estrutura.
  
@@ -90,7 +96,20 @@ let abreviacaoMeuSigno = abreviacao(doSigno: meuSigno)
 let abreviacaoAries = abreviacao(doSigno: .aries)
 
 // Sua function aqui!
-
+func abreviacaoCargo(doCargo cargo: Cargo) -> String{
+    switch cargo {
+    case .assistente:
+        return "Asst."
+    case .coordenador:
+        return "Coord."
+    case .diretor:
+        return "Dir."
+    case .monitor:
+        return "Mntr."
+    case .professor:
+        return "Prof."
+    }
+}
 /*:
 Pronto! Agora você já é metade Jedi 🤺.
  

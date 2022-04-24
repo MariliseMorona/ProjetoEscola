@@ -11,9 +11,49 @@ import UIKit
 // Sugiro que utilizem esse Enum pois eu já deixei preparado para os botões, mas sintam-se à vontade para alterar para uma estrutura melhor caso sintam essa necessidade.
 enum Cargo {
     case monitor, professor, coordenador, diretor, assistente
+    
+    func nomeFormal() -> String {
+        switch self {
+        case .assistente:
+            return "Assistente"
+        case .coordenador:
+            return "Coordenador"
+        case .diretor:
+            return "Diretor"
+        case .monitor:
+            return "Monitor"
+        case .professor:
+            return "Professor"
+        }
+    }
 }
+    struct Colaborador{
+        let nome: String
+        let matricula: Int
+        let salario: Double
+        let cargo: Cargo
+        
+        func seApresentar()-> String{
+            let apresentacao = "Meu nome é \(nome), sou \(cargo) e minha matrícula é \(matricula)"
+            return apresentacao
+        }
+    }
 
 class ViewController: UIViewController {
+    
+    var colaboradores: [Colaborador] = []
+    var nomeColaborador: String = ""
+    var matriculaColaborador : Int = 0
+    var salarioColaborador: Double = 0.0
+    var cargoSelecionado: Cargo = .monitor
+    
+//    init(colaboradores: [Colaborador]) {
+//        self.colaboradores = colaboradores
+//    }
+    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     @IBOutlet weak var outputMessage: UILabel!
     
@@ -28,8 +68,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var assistenteButton: UIButton!
     
     @IBOutlet weak var removeMatriculaTextField: UITextField!
-    
-    var cargoSelecionado: Cargo = .monitor
     
     @IBAction func selecionaMonitor(_ sender: UIButton) {
         cargoSelecionado = .monitor
@@ -56,18 +94,28 @@ class ViewController: UIViewController {
         selecionaBotao(botao: sender)
     }
     
-    @IBAction func cadastrarColaborador(_ sender: UIButton) {
+    @IBAction func cadastrarColaborador(_ sender: UIButton){
         // TODO: Inserir Feature 1 Aqui!
-        // Coloque uma lista ordenada de colaboradores (apenas com os nomes) na propriedade 'outputMessage'! (Assim, a gente consegue ver que de fato o colaborador foi cadastrado)
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
         
-        // Importante deixar essa função como última porque ela reseta o sistema por estado inicial.
+        nomeColaborador = nomeTextField.text ?? ""
+        
+        let numeroMatricula = matriculaTextField.text ?? ""
+        matriculaColaborador = (numeroMatricula as NSString).integerValue
+
+        let numeroSalario = salarioTextField.text ?? ""
+        salarioColaborador = Double(numeroSalario) ?? 0
+        
+        let novoColaborador = Colaborador(nome: nomeColaborador, matricula: matriculaColaborador, salario: salarioColaborador, cargo: cargoSelecionado)
+        
+        adicionaColaborador(novoColaborador)
         resetaCadastraColaborador()
     }
     
     @IBAction func removerColaborador(_ sender: UIButton) {
         // TODO: Inserir Feature 2 Aqui!
+        func removeColaborador(comMatricula matricula: Int) {
+            colaboradores.removeAll{ $0.matricula == matricula }
+        }
         // Coloque uma lista ordenada de colaboradores (apenas com os nomes) na propriedade 'outputMessage'! (Assim, a gente consegue ver que de fato o colaborador foi removido)
         // Basta fazer:
         // outputMessage.text = "A sua mensagem aqui"
@@ -78,6 +126,14 @@ class ViewController: UIViewController {
     
     @IBAction func listarGastosMensaisComTodosColaboradores(_ sender: UIButton) {
         // TODO: Inserir Feature 3 Aqui!
+        func listaGastoMensais() -> Double {
+            var gastoTotal: Double = 0
+            for colaborador in colaboradores {
+                gastoTotal += colaborador.salario
+            }
+            return gastoTotal
+            
+        }
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
         // outputMessage.text = "A sua mensagem aqui"
@@ -85,6 +141,12 @@ class ViewController: UIViewController {
     
     @IBAction func listarGastosMensaisPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 4 Aqui!
+        
+        func listaGasto(daCargo cargo: Cargo) -> String {
+            var gastoTotal: Double = 0
+            gastoTotal = colaboradores.map{ $0.salario }.reduce(0, +)
+            return "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
+        }
         // Você pode utilizar a propriedade 'cargoSelecionado' para escolher listar um cargo só.
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
@@ -102,6 +164,12 @@ class ViewController: UIViewController {
     
     @IBAction func listarQuantasPessoasExistemPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 5 Aqui!
+        func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> String {
+            var quantidadeDeColaboradores = 0
+            quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
+        
+            return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
+        }
         // Você pode utilizar a propriedade 'cargoSelecionado' para escolher listar a quantidade de pessoas em um cargo só.
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
@@ -119,6 +187,12 @@ class ViewController: UIViewController {
     
     @IBAction func listarNomesColaboradoresOrdemAlfabetica(_ sender: UIButton) {
         // TODO: Inserir Feature 6 Aqui!
+        func listaColaboradoresEmOrdemAlfabetica() -> [String] {
+            var nomes: [String] = []
+            nomes = colaboradores.map{ $0.nome }.sorted()
+            return nomes
+        }
+    }
         // Coloque a mensagem na propriedade 'outputMessage'!
         // Basta fazer:
         // outputMessage.text = "A sua mensagem aqui"
@@ -129,6 +203,12 @@ class ViewController: UIViewController {
         // let nomesJuntos = nomes.joined(separator: ", ")
         // outputMessage.text = newSentence
         // Dei colherinha de chá aqui hein 🥄☕️.
+    func adicionaColaborador(_ colaborador: Colaborador){
+        
+        colaboradores.append(colaborador)
+        
+        outputMessage.text = colaborador.seApresentar()
+        
     }
     
 }
