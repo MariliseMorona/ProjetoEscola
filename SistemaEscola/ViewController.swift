@@ -95,8 +95,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func cadastrarColaborador(_ sender: UIButton){
-        // TODO: Inserir Feature 1 Aqui!
-        
         nomeColaborador = nomeTextField.text ?? ""
         
         let numeroMatricula = matriculaTextField.text ?? ""
@@ -125,57 +123,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func listarGastosMensaisComTodosColaboradores(_ sender: UIButton) {
-        // TODO: Inserir Feature 3 Aqui!
-        
         let messageGastosTotais = String(listaGastoMensais())
         outputMessage.text = messageGastosTotais
-        // Coloque a mensagem na propriedade 'outputMessage'!
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
     }
     
     @IBAction func listarGastosMensaisPorCargo(_ sender: UIButton) {
-        // TODO: Inserir Feature 4 Aqui!
-        
-        
         outputMessage.text = listaGasto(doCargo: cargoSelecionado)
-        
-        // Você pode utilizar a propriedade 'cargoSelecionado' para escolher listar um cargo só.
-        // Coloque a mensagem na propriedade 'outputMessage'!
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
-        
-        // Você pode também listar todos os cargos (ao invés de somente um), se assim preferir.
-        // Basta fazer:
-        // let gastoCargoMonitor = <sua função que calcula esse gasto>
-        // let gastoCargoProfessor = <sua função que calcula esse gasto>
-        // let gastoCargoCoordenador = <sua função que calcula esse gasto>
-        // let todosOsGastos = "Monitor: \(gastoCargoMonitor) \nProfessor: \(gastoCargoProfessor)\n Coordenador: \(gastoCargoCoordenador)".
-        // \n = Quebra de linha
-        // Não precisa seguir exatamente esse modelo. Foi só um exemplo.
+      
     }
     
     @IBAction func listarQuantasPessoasExistemPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 5 Aqui!
-        func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> String {
-            var quantidadeDeColaboradores = 0
-            quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
+        outputMessage.text = listaQuantidadeDeColaboradores(doCargo: cargoSelecionado)
         
-            return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
-        }
-        // Você pode utilizar a propriedade 'cargoSelecionado' para escolher listar a quantidade de pessoas em um cargo só.
-        // Coloque a mensagem na propriedade 'outputMessage'!
-        // Basta fazer:
-        // outputMessage.text = "A sua mensagem aqui"
-        
-        // Você pode também listar a quantidade de pessoas nos cargos (ao invés de somente um), se assim preferir.
-        // Basta fazer:
-        // let pessoasCargoMonitor = <sua função que conta quantas pessoas nesse cargo>
-        // let pessoasCargoProfessor = <sua função que conta quantas pessoas nesse cargo>
-        // let pessoasCargoCoordenador = <sua função que conta quantas pessoas nesse cargo>
-        // let todosAsPessoas = "Monitor: \(gastoCargoMonitor) \nProfessor: \(gastoCargoProfessor)\n Coordenador: \(gastoCargoCoordenador)".
-        // \n = Quebra de linha
-        // Não precisa seguir exatamente esse modelo. Foi só um exemplo.
     }
     
     @IBAction func listarNomesColaboradoresOrdemAlfabetica(_ sender: UIButton) {
@@ -221,6 +181,13 @@ class ViewController: UIViewController {
         }
         let messageGastosTotaisPorCargo = "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
         return messageGastosTotaisPorCargo
+    }
+    
+    func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> String {
+        var quantidadeDeColaboradores = 0
+        quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
+    
+        return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
     }
 }
 
