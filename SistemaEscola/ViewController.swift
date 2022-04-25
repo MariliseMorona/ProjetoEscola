@@ -8,45 +8,9 @@
 
 import UIKit
 
-// Sugiro que utilizem esse Enum pois eu já deixei preparado para os botões, mas sintam-se à vontade para alterar para uma estrutura melhor caso sintam essa necessidade.
-enum Cargo {
-    case monitor, professor, coordenador, diretor, assistente
+class ViewController: UIViewController, ViewModelProtocol {
     
-    func nomeFormal() -> String {
-        switch self {
-        case .assistente:
-            return "Assistente"
-        case .coordenador:
-            return "Coordenador"
-        case .diretor:
-            return "Diretor"
-        case .monitor:
-            return "Monitor"
-        case .professor:
-            return "Professor"
-        }
-    }
-}
-    struct Colaborador{
-        let nome: String
-        let matricula: Int
-        let salario: Double
-        let cargo: Cargo
-        
-        func seApresentar()-> String{
-            let apresentacao = "Meu nome é \(nome), sou \(cargo) e minha matrícula é \(matricula)"
-            return apresentacao
-        }
-    }
-
-class ViewController: UIViewController {
-    
-    var colaboradores: [Colaborador] = []
-    var nomeColaborador: String = ""
-    var matriculaColaborador : Int = 0
-    var salarioColaborador: Double = 0.0
-    var cargoSelecionado: Cargo = .monitor
-    var quantidadeDeColaboradores : Int = 0
+    lazy var vm: ViewModel = ViewModel(viewModelProtocol: self)
     
     @IBOutlet weak var outputMessage: UILabel!
     
@@ -63,138 +27,76 @@ class ViewController: UIViewController {
     @IBOutlet weak var removeMatriculaTextField: UITextField!
     
     @IBAction func selecionaMonitor(_ sender: UIButton) {
-        cargoSelecionado = .monitor
+        vm.cargoSelecionado = .monitor
         selecionaBotao(botao: sender)
     }
     
     @IBAction func selecionaProfessor(_ sender: UIButton) {
-        cargoSelecionado = .professor
+        vm.cargoSelecionado = .professor
         selecionaBotao(botao: sender)
     }
     
     @IBAction func selecionaCoordenador(_ sender: UIButton) {
-        cargoSelecionado = .coordenador
+        vm.cargoSelecionado = .coordenador
         selecionaBotao(botao: sender)
     }
     
     @IBAction func selecionaDiretor(_ sender: UIButton) {
-        cargoSelecionado = .diretor
+        vm.cargoSelecionado = .diretor
         selecionaBotao(botao: sender)
     }
     
     @IBAction func selecionaAssistente(_ sender: UIButton) {
-        cargoSelecionado = .assistente
+        vm.cargoSelecionado = .assistente
         selecionaBotao(botao: sender)
     }
     
     @IBAction func cadastrarColaborador(_ sender: UIButton){
-        nomeColaborador = nomeTextField.text ?? ""
+        vm.nomeColaborador = nomeTextField.text ?? ""
         
         let numeroMatricula = matriculaTextField.text ?? ""
-        matriculaColaborador = (numeroMatricula as NSString).integerValue
+        vm.matriculaColaborador = (numeroMatricula as NSString).integerValue
 
         let numeroSalario = salarioTextField.text ?? ""
-        salarioColaborador = Double(numeroSalario) ?? 0
+        vm.salarioColaborador = Double(numeroSalario) ?? 0
         
-        let novoColaborador = Colaborador(nome: nomeColaborador, matricula: matriculaColaborador, salario: salarioColaborador, cargo: cargoSelecionado)
+        let novoColaborador = Colaborador(nome: vm.nomeColaborador, matricula: vm.matriculaColaborador, salario: vm.salarioColaborador, cargo: vm.cargoSelecionado)
         
-        condicaoContratacao(novoColaborador)
+        vm.condicaoContratacao(novoColaborador)
         resetaCadastraColaborador()
     }
     
     @IBAction func removerColaborador(_ sender: UIButton) {
-        removeColaborador(comMatricula: matriculaColaborador)
+        vm.removeColaborador(comMatricula: vm.matriculaColaborador)
        resetaRemoveColaborador()
     }
     
     @IBAction func listarGastosMensaisComTodosColaboradores(_ sender: UIButton) {
-        let messageGastosTotais = String(listaGastoMensais())
+        let messageGastosTotais = String(vm.listaGastoMensais())
         outputMessage.text = messageGastosTotais
     }
     
     @IBAction func listarGastosMensaisPorCargo(_ sender: UIButton) {
-        outputMessage.text = listaGasto(doCargo: cargoSelecionado)
+        outputMessage.text = vm.listaGasto(doCargo: vm.cargoSelecionado)
       
     }
     
     @IBAction func listarQuantasPessoasExistemPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 5 Aqui!
-        outputMessage.text = listaColaboradoresPorCargo(doCargo: cargoSelecionado)
+        outputMessage.text = vm.listaColaboradoresPorCargo(doCargo: vm.cargoSelecionado)
         
     }
     
     @IBAction func listarNomesColaboradoresOrdemAlfabetica(_ sender: UIButton) {
-        outputMessage.text = listaColaboradoresEmOrdemAlfabetica()
+        outputMessage.text = vm.listaColaboradoresEmOrdemAlfabetica()
         
     }
     
-    func adicionaColaborador(_ colaborador: Colaborador){
-        colaboradores.append(colaborador)
-        outputMessage.text = colaborador.seApresentar()
+    func changeOutputMessage(message: String) -> String{
+        let printMessage = message
+        outputMessage.text = printMessage
         
-    }
-    
-    func listaGastoMensais() -> Double {
-        var gastoTotal: Double = 0
-        for colaborador in colaboradores {
-            gastoTotal += colaborador.salario
-        }
-        return gastoTotal
-        
-    }
-    
-    func listaGasto(doCargo cargo: Cargo) -> String {
-        var gastoTotal: Double = 0
-        
-        for colaborador in colaboradores where colaborador.cargo == cargo {
-             gastoTotal += colaborador.salario
-        }
-        let messageGastosTotaisPorCargo = "Os gastos com o cargo \(cargo.nomeFormal()) são de R$\(gastoTotal)."
-        return messageGastosTotaisPorCargo
-    }
-    
-    func listaColaboradoresPorCargo(doCargo cargo: Cargo) -> String {
-        
-        quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
-    
-        return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
-    }
-    
-    func listaColaboradoresEmOrdemAlfabetica() -> String {
-        var nomes: [String] = []
-        nomes = colaboradores.map{ $0.nome }.sorted()
-        
-        let arrayNomes = nomes.sorted(by: { $0.lowercased() < $1.lowercased() })
-        let stringArray = arrayNomes
-        let string = stringArray.joined(separator: ", ")
-        
-        return string
-    }
-    
-    func removeColaborador(comMatricula matricula: Int) {
-        colaboradores.removeAll{ $0.matricula == matricula }
-    }
-    
-    func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> Int {
-        
-        quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
-    
-        return quantidadeDeColaboradores
-    }
-    
-    func condicaoContratacao(_ colaborador: Colaborador){
-        let numeroCoordenadores = listaQuantidadeDeColaboradores(doCargo: .coordenador)
-        let numeroProfessores = listaQuantidadeDeColaboradores(doCargo: .professor)
-        let numeroDiretores = listaQuantidadeDeColaboradores(doCargo: .diretor)
-        let maximoDiretores = 1
-                 
-        if colaborador.cargo == .coordenador, numeroCoordenadores >= numeroProfessores{
-            outputMessage.text = "Você não pode mais contratar coordenadores."
-        } else if colaborador.cargo == .diretor, numeroDiretores >= maximoDiretores {
-            outputMessage.text = "Você não pode mais contratar diretores."
-        } else {
-            adicionaColaborador(colaborador)
-        }
+        return outputMessage.text ?? ""
     }
 }
 

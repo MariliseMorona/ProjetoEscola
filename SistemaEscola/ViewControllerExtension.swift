@@ -24,7 +24,7 @@ extension ViewController {
         monitorButton.backgroundColor = .systemBlue
         monitorButton.setTitleColor(.white, for: .normal)
         
-        cargoSelecionado = .monitor
+        vm.cargoSelecionado = .monitor
     }
     
     func resetaTodosTextFieldCadastro() {
