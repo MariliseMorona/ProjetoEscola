@@ -46,14 +46,7 @@ class ViewController: UIViewController {
     var matriculaColaborador : Int = 0
     var salarioColaborador: Double = 0.0
     var cargoSelecionado: Cargo = .monitor
-    
-//    init(colaboradores: [Colaborador]) {
-//        self.colaboradores = colaboradores
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    var quantidadeDeColaboradores : Int = 0
     
     @IBOutlet weak var outputMessage: UILabel!
     
@@ -105,7 +98,7 @@ class ViewController: UIViewController {
         
         let novoColaborador = Colaborador(nome: nomeColaborador, matricula: matriculaColaborador, salario: salarioColaborador, cargo: cargoSelecionado)
         
-        adicionaColaborador(novoColaborador)
+        condicaoContratacao(novoColaborador)
         resetaCadastraColaborador()
     }
     
@@ -126,7 +119,7 @@ class ViewController: UIViewController {
     
     @IBAction func listarQuantasPessoasExistemPorCargo(_ sender: UIButton) {
         // TODO: Inserir Feature 5 Aqui!
-        outputMessage.text = listaQuantidadeDeColaboradores(doCargo: cargoSelecionado)
+        outputMessage.text = listaColaboradoresPorCargo(doCargo: cargoSelecionado)
         
     }
     
@@ -160,8 +153,8 @@ class ViewController: UIViewController {
         return messageGastosTotaisPorCargo
     }
     
-    func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> String {
-        var quantidadeDeColaboradores = 0
+    func listaColaboradoresPorCargo(doCargo cargo: Cargo) -> String {
+        
         quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
     
         return "Existe(m) \(quantidadeDeColaboradores) colaborador(s) do cargo \(cargo.nomeFormal())."
@@ -180,6 +173,28 @@ class ViewController: UIViewController {
     
     func removeColaborador(comMatricula matricula: Int) {
         colaboradores.removeAll{ $0.matricula == matricula }
+    }
+    
+    func listaQuantidadeDeColaboradores(doCargo cargo: Cargo) -> Int {
+        
+        quantidadeDeColaboradores = colaboradores.filter{ $0.cargo == cargo }.count
+    
+        return quantidadeDeColaboradores
+    }
+    
+    func condicaoContratacao(_ colaborador: Colaborador){
+        let numeroCoordenadores = listaQuantidadeDeColaboradores(doCargo: .coordenador)
+        let numeroProfessores = listaQuantidadeDeColaboradores(doCargo: .professor)
+        let numeroDiretores = listaQuantidadeDeColaboradores(doCargo: .diretor)
+        let maximoDiretores = 1
+                 
+        if colaborador.cargo == .coordenador, numeroCoordenadores >= numeroProfessores{
+            outputMessage.text = "Você não pode mais contratar coordenadores."
+        } else if colaborador.cargo == .diretor, numeroDiretores >= maximoDiretores {
+            outputMessage.text = "Você não pode mais contratar diretores."
+        } else {
+            adicionaColaborador(colaborador)
+        }
     }
 }
 
